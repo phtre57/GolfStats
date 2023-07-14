@@ -1,0 +1,10 @@
+node_modules
+
+# cms
+../cms/node_modules
+../cms/dist
+
+#cdk
+../cdk/node_modules
+../cdk/build
+
