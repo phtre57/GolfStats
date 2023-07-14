@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from 'express'
 import { knex } from 'knex'
 
+import { TableNames } from './infra'
+
 const app: Express = express()
 const port = 3001
 
@@ -25,9 +27,23 @@ app.get('/health', (req: Request, res: Response) => {
 })
 
 app.get('/courses', async (req: Request, res: Response) => {
-  const courses = await db.table('GolfCourses').select()
-  console.log(courses)
+  const courses = await db.select('*').from(TableNames.GolfCourses)
   res.status(200).send(courses)
+})
+
+app.get('/courses/:id', async (req: Request, res: Response) => {
+  const courseId = req.params.id
+  const courses = await db.select('*').from(TableNames.GolfCourses)
+  const tees = await db
+    .select('*')
+    .from(`${TableNames.GolfCourses} as course`)
+    .join(`${TableNames.Tees} as tee`, 'tee.GolfCourseId', 'course.Id')
+    .join(`${TableNames.Holes} as holes`, 'holes.TeeId', 'tee.Id')
+    .where('course.Id', '=', courseId)
+  res.status(200).send({
+    ...courses[0],
+    tees,
+  })
 })
 
 app.listen(port, () => {

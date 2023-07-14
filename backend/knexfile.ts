@@ -18,7 +18,7 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: './infra/migrations',
+      directory: './infra/repositories/postgres/migrations',
     },
   },
 }

@@ -114,7 +114,7 @@ module.exports = {
     },
     'import/resolver': {
       node: {
-        paths: ['src'],
+        paths: ['./backend', './packages'],
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
