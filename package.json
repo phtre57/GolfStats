@@ -1,0 +1,21 @@
+{
+  "name": "golfstats",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:phtre57/GolfStats.git",
+  "author": "phtre57 <phtre57@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"./**/*.{ts,tsx}\" --quiet -c .eslintrc.js",
+    "lint:fix": "eslint \"./**/*.{ts,tsx}\" --fix -c .eslintrc.js"
+  },
+  "volta": {
+    "node": "18.15.0",
+    "yarn": "1.22.19"
+  },
+  "workspaces": [
+    "backend",
+    "packages"
+ ]
+}

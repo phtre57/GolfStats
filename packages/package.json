@@ -1,0 +1,27 @@
+{
+  "name": "packages",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"../**/*.{ts,tsx}\" --quiet -c .eslintrc.js --resolve-plugins-relative-to .",
+    "lint:fix": "eslint \"../**/*.{ts,tsx}\" --fix -c .eslintrc.js --resolve-plugins-relative-to ."
+  },
+  "volta": {
+    "node": "18.15.0",
+    "yarn": "1.22.19"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {}
+}
