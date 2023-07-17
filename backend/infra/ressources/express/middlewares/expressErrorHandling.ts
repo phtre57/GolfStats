@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from 'express'
+import { Response } from 'express'
 
 import { AppError } from 'domain/exceptions'
 
-export const expressErrorHandling = (req: Request, res: Response, next: NextFunction) => {
+export const expressErrorHandling = (func: () => any, res: Response) => {
   try {
-    next()
-  } catch (err) {
-    console.log('Error in resource: ', err)
-    if (err instanceof AppError) {
-      res.status(err.statusCode).send({
-        message: err.message,
-        code: err.name,
+    func()
+  } catch (error) {
+    console.log('Error in resource: ', error)
+    if (error instanceof AppError) {
+      res.status(error.statusCode).send({
+        message: error.message,
+        code: error.name,
       })
     } else {
       res.status(500).send({

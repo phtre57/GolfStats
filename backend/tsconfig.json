@@ -26,11 +26,7 @@
       "domain/*": ["domain/*"],
       "infra/*": ["infra/*"],
       "services/*": ["services/*"]
-    },
-    "plugins": [
-      // Transform paths in output .js files
-      { "transform": "typescript-transform-paths" }
-    ]
+    }
   },
   "exclude": ["node_modules/**/*", "./build/**/*"]
 }

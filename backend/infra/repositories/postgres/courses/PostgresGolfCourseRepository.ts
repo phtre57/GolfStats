@@ -1,20 +1,20 @@
 import { Injector } from '@sailplane/injector'
-import { Knex } from 'knex'
 
 import { GolfCourse, GolfCourseRepository, PartialGolfCourse } from 'domain/courses'
 import { GolfCourseNotFoundException } from 'domain/courses/repositories/exceptions/GolfCourseNotFoundException'
 
+import { KnexClient } from '../KnexClient'
 import { TableNames } from '../TableNames'
 
 export class PostgresGolfCourseRepository implements GolfCourseRepository {
-  private client: Knex
+  private client: KnexClient
 
-  constructor({ client }: { client : Knex }) {
+  constructor({ client }: { client : KnexClient }) {
     this.client = client
   }
 
   async getCourse(id: string): Promise<GolfCourse> {
-    const course = await this.client
+    const course = await this.client.db
       .select<PartialGolfCourse[]>('*')
       .from(TableNames.GolfCourses)
       .where('Id', '=', id)
@@ -23,7 +23,7 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
       throw new GolfCourseNotFoundException(id)
     }
 
-    const tees = await this.client
+    const tees = await this.client.db
       .select('*')
       .from(`${TableNames.GolfCourses} as course`)
       .join(`${TableNames.Tees} as tee`, 'tee.GolfCourseId', 'course.Id')
@@ -37,14 +37,14 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
   }
 
   async getCourses(): Promise<PartialGolfCourse[]> {
-    return this.client
+    return this.client.db
       .select<PartialGolfCourse[]>('*')
       .from(TableNames.GolfCourses)
   }
 }
 
 const create = (): PostgresGolfCourseRepository => {
-  const client = Injector.getByName<Knex>('Knex')!
+  const client = Injector.get(KnexClient)!
   return new PostgresGolfCourseRepository({ client })
 }
 
