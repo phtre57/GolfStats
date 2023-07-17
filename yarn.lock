@@ -111,6 +111,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@sailplane/injector@^4.0.0-alpha.1":
+  version "4.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@sailplane/injector/-/injector-4.0.0-alpha.1.tgz#083ebfd4789e86fe6c83d2e2f8ae0737a2b04cad"
+  integrity sha512-Tn6vGKQ7fMMQ7pZI+F5p/CCmBFV+dJUo04h80X5T69UYP6LG/vF2P+g2iJg0BbrDoncyrXUQsabWBfqtRVpxzg==
+  dependencies:
+    reflect-metadata "~0.1.13"
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
@@ -519,6 +526,11 @@ body-parser@1.20.1:
     raw-body "2.5.1"
     type-is "~1.6.18"
     unpipe "1.0.0"
+
+bottlejs@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/bottlejs/-/bottlejs-2.0.1.tgz#f2c97b3ee7a180a1a42c5156eb7ac5b7a2beaf09"
+  integrity sha512-50T0bzqeAqZ+//kgjdDxNu7UP8Je04isNPyHPwwOOPoeZmtVESkuF9nwkWEqSEd9Sw1yJ1oaoHBAMxe/wG4Zzg==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -2233,6 +2245,11 @@ rechoir@^0.8.0:
   integrity sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==
   dependencies:
     resolve "^1.20.0"
+
+reflect-metadata@~0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 regenerator-runtime@^0.13.11:
   version "0.13.11"
