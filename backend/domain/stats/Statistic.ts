@@ -3,6 +3,7 @@ import { Penalties } from './Penalties'
 import { PuttingAccuracy } from './PuttingAccuracy'
 
 export interface IStatistic {
+  Score: number
   DrivingAccuracy: LongGameAccuracy
   IronAccuracy: LongGameAccuracy
   NumberOfPutts: number
@@ -13,21 +14,24 @@ export interface IStatistic {
 }
 
 export class Statistic {
-  DrivingAccuracy: LongGameAccuracy
+  Score: number
 
-  IronAccuracy: LongGameAccuracy
+  DrivingAccuracy?: LongGameAccuracy
 
-  NumberOfPutts: number
+  IronAccuracy?: LongGameAccuracy
 
-  PuttingAccuracy: PuttingAccuracy[]
+  NumberOfPutts?: number
 
-  IsInSand: boolean
+  PuttingAccuracy?: PuttingAccuracy[]
 
-  NumberOfChips: number
+  IsInSand?: boolean
 
-  Penalties: Penalties[]
+  NumberOfChips?: number
+
+  Penalties?: Penalties[]
 
   constructor(params: IStatistic) {
+    this.Score = params.Score
     this.DrivingAccuracy = params.DrivingAccuracy
     this.IronAccuracy = params.IronAccuracy
     this.NumberOfPutts = params.NumberOfPutts

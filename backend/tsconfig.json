@@ -20,7 +20,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "baseUrl": "./",
     "paths": {
       "domain/*": ["domain/*"],
