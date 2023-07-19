@@ -5,4 +5,11 @@ export interface ComputedStatistics {
   IronLeft: number
   DrivingRight: number
   DrivingLeft: number
+  PuttingLowSide: number,
+  PuttingHighSide: number,
+  PuttingHit: number
+  PuttingShort: number,
+  NumberOfPutts: number
+  FinalScore: number
+  Scrambling: number
 }
