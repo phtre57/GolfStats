@@ -5,7 +5,7 @@ import { uuid } from 'uuidv4'
 import { GolfCourseRepository } from 'domain/courses'
 import { DateTime } from 'domain/datetime'
 import { CouldNotCreateGameException, Game, GameNotFoundException, GamesRepository } from 'domain/games'
-import { ComputedStatistics, Statistics } from 'domain/stats'
+import { Statistics } from 'domain/stats'
 
 import { KnexClient } from '../KnexClient'
 import { TableNames } from '../TableNames'
@@ -23,7 +23,7 @@ export class PostgresGamesRepository implements GamesRepository {
     this.golfCourseRepository = golfCourseRepository
   }
 
-  async createGame(game: Game, stats: ComputedStatistics): Promise<void> {
+  async createGame(game: Game): Promise<Game> {
     try {
       await this.client.db
         .table(TableNames.Games)
@@ -32,19 +32,19 @@ export class PostgresGamesRepository implements GamesRepository {
           Date: game.Date.toISOString(),
           GolfCourseId: game.GolfCourse.Id,
           TeeId: game.Tee.Id,
-          FIR: stats.FIR,
-          GIR: stats.GIR,
-          Scrambling: stats.Scrambling,
-          IronLeft: stats.IronLeft,
-          IronRight: stats.IronRight,
-          DrivingLeft: stats.DrivingLeft,
-          DrivingRight: stats.DrivingRight,
-          PuttingLowSide: stats.PuttingLowSide,
-          PuttingHighSide: stats.PuttingHighSide,
-          PuttingHit: stats.PuttingHit,
-          PuttingShort: stats.PuttingShort,
-          NumberOfPutts: stats.NumberOfPutts,
-          FinalScore: stats.FinalScore,
+          FIR: game.GameStats.FIR,
+          GIR: game.GameStats.GIR,
+          Scrambling: game.GameStats.Scrambling,
+          IronLeft: game.GameStats.IronLeft,
+          IronRight: game.GameStats.IronRight,
+          DrivingLeft: game.GameStats.DrivingLeft,
+          DrivingRight: game.GameStats.DrivingRight,
+          PuttingLowSide: game.GameStats.PuttingLowSide,
+          PuttingHighSide: game.GameStats.PuttingHighSide,
+          PuttingHit: game.GameStats.PuttingHit,
+          PuttingShort: game.GameStats.PuttingShort,
+          NumberOfPutts: game.GameStats.NumberOfPutts,
+          FinalScore: game.GameStats.FinalScore,
         })
 
       const dbStats = game.Statistics.Statistics.map((stat) => ({
@@ -64,6 +64,8 @@ export class PostgresGamesRepository implements GamesRepository {
       await this.client.db
         .table(TableNames.Statistics)
         .insert(dbStats)
+
+      return game
     } catch (e) {
       logger.info('Error with client when creating game', e)
       throw new CouldNotCreateGameException()
@@ -76,6 +78,8 @@ export class PostgresGamesRepository implements GamesRepository {
       .from(`${TableNames.Games} as game`)
       .join(`${TableNames.Statistics} as stat`, 'stat.GameId', 'game.Id')
       .where('Id', '=', id)
+
+    logger.info('Raw games received: ', rawGames)
 
     if (rawGames.length < 1) {
       throw new GameNotFoundException(id)

@@ -1,5 +1,3 @@
-import { ComputedStatistics } from 'domain/stats'
-
 import { Game } from '../Game'
 
 export interface GamesRepository {
@@ -7,5 +5,5 @@ export interface GamesRepository {
 
   getGames(): Promise<Game[]>
 
-  createGame(game: Game, stats: ComputedStatistics): Promise<void>
+  createGame(game: Game): Promise<Game>
 }

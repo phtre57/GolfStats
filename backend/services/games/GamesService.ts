@@ -21,7 +21,7 @@ export class GamesService {
     this.gamesRepository = params.gamesRepository
   }
 
-  async createGame(newGame: NewGame): Promise<void> {
+  async createGame(newGame: NewGame): Promise<Game> {
     const golfCourse = await this.golfCourseRepository.getCourse(newGame.GolfCourseId)
     const tee = await this.golfCourseRepository.getTee(newGame.TeeId)
     const stats = new Statistics({
@@ -35,7 +35,7 @@ export class GamesService {
       GolfCourse: golfCourse,
       Statistics: stats,
     })
-    await this.gamesRepository.createGame(game, game.Statistics.computeStats())
+    return this.gamesRepository.createGame(game)
   }
 }
 

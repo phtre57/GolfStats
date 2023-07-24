@@ -1,4 +1,4 @@
-import { Struct, array, boolean, min, number, object, refine, string } from 'superstruct'
+import { Struct, array, boolean, min, number, object, optional, refine, string } from 'superstruct'
 
 import { HoleNumbers, LongGameAccuracy, PuttingAccuracy } from 'domain/stats'
 
@@ -25,11 +25,11 @@ export const StatisticDto = object({
   Score: min(number(), 1),
   NumberOfPutts: min(number(), 1),
   HoleNumber: between(1, 18) as Struct<HoleNumbers>,
-  DrivingAccuracy: LongGameAccuracyDto as Struct<LongGameAccuracy>,
-  IronAccuracy: LongGameAccuracyDto as Struct<LongGameAccuracy>,
-  PuttingAccuracy: array(PuttingAccuracyDto as Struct<PuttingAccuracy>),
-  IsInSand: boolean(),
-  NumberOfChips: min(number(), 1),
+  DrivingAccuracy: optional(LongGameAccuracyDto as Struct<LongGameAccuracy>),
+  IronAccuracy: optional(LongGameAccuracyDto as Struct<LongGameAccuracy>),
+  PuttingAccuracy: optional(array(PuttingAccuracyDto as Struct<PuttingAccuracy>)),
+  IsInSand: optional(boolean()),
+  NumberOfChips: optional(min(number(), 1)),
 })
 
 export const NewGameDto = object({

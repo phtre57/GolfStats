@@ -27,8 +27,11 @@ GamesRouter.post('/games', async (req: Request, res: Response, next: NextFunctio
       ...data,
       Date: DateTime.fromISOString(data.Date),
     }
-    await service.createGame(game)
-    res.status(200).send({})
+    const createdGame = await service.createGame(game)
+    res.status(200).send({
+      ...createdGame,
+      Date: createdGame.Date.toISOString(),
+    })
   } catch (err) {
     next(err)
   }
@@ -36,7 +39,7 @@ GamesRouter.post('/games', async (req: Request, res: Response, next: NextFunctio
 
 GamesRouter.get('/games/:gameId', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { gameId } = req.params
+    // const { gameId } = req.params
     // do something
     res.status(200).send({})
   } catch (err) {

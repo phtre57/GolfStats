@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express'
 
-import { expressErrorHandling, GolfCoursesRouter } from 'infra'
+import { expressErrorHandling, GolfCoursesRouter, GamesRouter } from 'infra'
 
 const app: Express = express()
 const port = 3001
@@ -14,6 +14,8 @@ app.get('/health', (req: Request, res: Response) => {
 })
 
 app.use(GolfCoursesRouter)
+
+app.use(GamesRouter)
 
 app.use(expressErrorHandling)
 

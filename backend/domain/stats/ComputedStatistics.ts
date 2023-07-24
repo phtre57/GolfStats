@@ -3,6 +3,7 @@ export interface ComputedStatistics {
   GIR: number
   IronRight: number
   IronLeft: number
+  IronShort: number
   DrivingRight: number
   DrivingLeft: number
   PuttingLowSide: number,

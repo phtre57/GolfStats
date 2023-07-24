@@ -1,6 +1,6 @@
 import { DateTime } from 'domain/datetime'
 
-import { GolfCourse, Statistic, Statistics, Tee } from '..'
+import { ComputedStatistics, GolfCourse, Statistic, Statistics, Tee } from '..'
 
 export interface IGame {
   Id: string
@@ -32,6 +32,8 @@ export class Game {
 
   OwnerId: string
 
+  GameStats: ComputedStatistics
+
   constructor(params: IGame) {
     this.Id = params.Id
     this.Date = params.Date
@@ -39,5 +41,6 @@ export class Game {
     this.Tee = params.Tee
     this.Statistics = params.Statistics
     this.OwnerId = params.OwnerId
+    this.GameStats = params.Statistics.computeStats()
   }
 }

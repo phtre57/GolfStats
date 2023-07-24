@@ -137,6 +137,7 @@ export class Statistics {
       GIR: this.computeGIR(),
       IronLeft: this.computeIronLeft(),
       IronRight: this.computeIronRight(),
+      IronShort: this.computeAverageStatOf('IronAccuracy', LongGameAccuracy.Short),
       DrivingLeft: this.computeDrivingLeft(),
       DrivingRight: this.computeDrivingRight(),
       PuttingLowSide: this.computePuttingLowSide(),
