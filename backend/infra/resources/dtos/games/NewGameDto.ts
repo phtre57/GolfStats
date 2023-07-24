@@ -1,6 +1,6 @@
-import { array, boolean, min, number, object, refine, string } from 'superstruct'
+import { Struct, array, boolean, min, number, object, refine, string } from 'superstruct'
 
-import { LongGameAccuracy, PuttingAccuracy } from 'domain/stats'
+import { HoleNumbers, LongGameAccuracy, PuttingAccuracy } from 'domain/stats'
 
 import { DatetimeDto } from '../datetime'
 import { between } from '../dtoUtils'
@@ -24,10 +24,10 @@ export const PuttingAccuracyDto = refine(
 export const StatisticDto = object({
   Score: min(number(), 1),
   NumberOfPutts: min(number(), 1),
-  HoleNumber: between(1, 18),
-  DrivingAccuracy: LongGameAccuracyDto,
-  IronAccuracy: LongGameAccuracyDto,
-  PuttingAccuracy: array(PuttingAccuracyDto),
+  HoleNumber: between(1, 18) as Struct<HoleNumbers>,
+  DrivingAccuracy: LongGameAccuracyDto as Struct<LongGameAccuracy>,
+  IronAccuracy: LongGameAccuracyDto as Struct<LongGameAccuracy>,
+  PuttingAccuracy: array(PuttingAccuracyDto as Struct<PuttingAccuracy>),
   IsInSand: boolean(),
   NumberOfChips: min(number(), 1),
 })

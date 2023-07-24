@@ -1,6 +1,10 @@
 import { Injector } from '@sailplane/injector'
 import { NextFunction, Request, Response, Router } from 'express'
+import { create } from 'superstruct'
 
+import { DateTime } from 'domain/datetime'
+import { NewGame } from 'domain/games'
+import { NewGameDto } from 'infra/resources/dtos'
 import { GamesService } from 'services/games'
 
 const service = Injector.get(GamesService)!
@@ -18,7 +22,12 @@ GamesRouter.get('/games', async (req: Request, res: Response, next: NextFunction
 
 GamesRouter.post('/games', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await service.createGame()
+    const data = create(req.body, NewGameDto)
+    const game: NewGame = {
+      ...data,
+      Date: DateTime.fromISOString(data.Date),
+    }
+    await service.createGame(game)
     res.status(200).send({})
   } catch (err) {
     next(err)
