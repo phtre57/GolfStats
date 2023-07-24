@@ -53,4 +53,11 @@ export class DateTime {
   public diff = (dateTime: DateTime, unit: ManipulateType): number => this.date.diff(dateTime.date, unit, true)
 
   public toFormat = (format: DateTimeFormat): string => this.date.format(format)
+
+  public static isISO8601DateTime = (dateTimeString: string): boolean => {
+    // ISO 8601 datetime format regex
+    const iso8601DateTimeRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d{1,6})?(Z|([+-]\d{2}:\d{2}))?$/
+
+    return iso8601DateTimeRegex.test(dateTimeString)
+  }
 }

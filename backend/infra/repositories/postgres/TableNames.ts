@@ -4,4 +4,5 @@ export enum TableNames {
   Holes = 'Holes',
   Games = 'Games',
   Statistics = 'Statistics',
+  Users = 'Users',
 }

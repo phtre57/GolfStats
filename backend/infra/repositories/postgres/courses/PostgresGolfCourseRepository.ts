@@ -1,6 +1,7 @@
 import { Injector } from '@sailplane/injector'
 
-import { GolfCourse, GolfCourseRepository, PartialGolfCourse } from 'domain/courses'
+import { GolfCourse, GolfCourseRepository, PartialGolfCourse, Tee } from 'domain/courses'
+import { TeeNotFoundException } from 'domain/courses/repositories/exceptions'
 import { GolfCourseNotFoundException } from 'domain/courses/repositories/exceptions/GolfCourseNotFoundException'
 
 import { KnexClient } from '../KnexClient'
@@ -11,6 +12,19 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
 
   constructor({ client }: { client : KnexClient }) {
     this.client = client
+  }
+
+  async getTee(id: string): Promise<Tee> {
+    const tees = await this.client.db
+      .select('*')
+      .from(TableNames.Tees)
+      .where('Id', '=', id)
+
+    if (tees.length < 1) {
+      throw new TeeNotFoundException(id)
+    }
+
+    return tees[0]
   }
 
   async getCourse(id: string): Promise<GolfCourse> {
