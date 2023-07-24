@@ -32,19 +32,7 @@ export class PostgresGamesRepository implements GamesRepository {
           Date: game.Date.toISOString(),
           GolfCourseId: game.GolfCourse.Id,
           TeeId: game.Tee.Id,
-          FIR: game.GameStats.FIR,
-          GIR: game.GameStats.GIR,
-          Scrambling: game.GameStats.Scrambling,
-          IronLeft: game.GameStats.IronLeft,
-          IronRight: game.GameStats.IronRight,
-          DrivingLeft: game.GameStats.DrivingLeft,
-          DrivingRight: game.GameStats.DrivingRight,
-          PuttingLowSide: game.GameStats.PuttingLowSide,
-          PuttingHighSide: game.GameStats.PuttingHighSide,
-          PuttingHit: game.GameStats.PuttingHit,
-          PuttingShort: game.GameStats.PuttingShort,
-          NumberOfPutts: game.GameStats.NumberOfPutts,
-          FinalScore: game.GameStats.FinalScore,
+          OwnerId: game.OwnerId,
         })
 
       const dbStats = game.Statistics.Statistics.map((stat) => ({
