@@ -37,6 +37,14 @@ export class GamesService {
     })
     return this.gamesRepository.createGame(game)
   }
+
+  async getGame(gameId: string): Promise<Game> {
+    return this.gamesRepository.getGame(gameId)
+  }
+
+  async getGames(ownerId: string): Promise<Game[]> {
+    return this.gamesRepository.getGames(ownerId)
+  }
 }
 
 const create = () => new GamesService({

@@ -4,8 +4,8 @@ import { uuid } from 'uuidv4'
 
 import { GolfCourseRepository } from 'domain/courses'
 import { DateTime } from 'domain/datetime'
-import { CouldNotCreateGameException, Game, GameNotFoundException, GamesRepository } from 'domain/games'
-import { Statistics } from 'domain/stats'
+import { CouldNotCreateGameException, Game, GameNotFoundException, GamesRepository, StatisticsNotFoundForGameException } from 'domain/games'
+import { Statistic, Statistics } from 'domain/stats'
 
 import { KnexClient } from '../KnexClient'
 import { TableNames } from '../TableNames'
@@ -21,6 +21,21 @@ export class PostgresGamesRepository implements GamesRepository {
   constructor({ client, golfCourseRepository }: { client : KnexClient, golfCourseRepository: GolfCourseRepository }) {
     this.client = client
     this.golfCourseRepository = golfCourseRepository
+  }
+
+  async getStatsForGame(id: string): Promise<Statistic[]> {
+    const rawStats = await this.client.db
+      .select('*')
+      .from(TableNames.Statistics)
+      .where('GameId', '=', id)
+
+    logger.info('Raw stats received: ', rawStats)
+
+    if (rawStats.length < 1) {
+      throw new StatisticsNotFoundForGameException(id)
+    }
+
+    return rawStats
   }
 
   async createGame(game: Game): Promise<Game> {
@@ -63,8 +78,7 @@ export class PostgresGamesRepository implements GamesRepository {
   async getGame(id: string): Promise<Game> {
     const rawGames = await this.client.db
       .select('*')
-      .from(`${TableNames.Games} as game`)
-      .join(`${TableNames.Statistics} as stat`, 'stat.GameId', 'game.Id')
+      .from(`${TableNames.Games}`)
       .where('Id', '=', id)
 
     logger.info('Raw games received: ', rawGames)
@@ -75,8 +89,10 @@ export class PostgresGamesRepository implements GamesRepository {
 
     const rawGame = rawGames[0]
 
-    const course = await this.golfCourseRepository.getCourse(rawGame.Id)
+    const course = await this.golfCourseRepository.getCourse(rawGame.GolfCourseId)
     const tee = await this.golfCourseRepository.getTee(rawGame.TeeId)
+
+    const stats = await this.getStatsForGame(rawGame.Id)
 
     return new Game({
       ...rawGame,
@@ -85,13 +101,20 @@ export class PostgresGamesRepository implements GamesRepository {
       Tee: tee,
       Statistics: new Statistics({
         Tee: tee,
-        Statistics: rawGame.Statistics,
+        Statistics: stats,
       }),
     })
   }
 
-  async getGames(): Promise<Game[]> {
-    throw new Error('Method not implemented.')
+  async getGames(ownerId: string): Promise<Game[]> {
+    const rawGames = await this.client.db
+      .select('*')
+      .from(`${TableNames.Games}`)
+      .where('OwnerId', '=', ownerId)
+
+    const gameIds = rawGames.map((game) => game.Id)
+
+    return Promise.all(gameIds.map((id) => this.getGame(id)))
   }
 }
 
