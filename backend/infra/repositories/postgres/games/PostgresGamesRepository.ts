@@ -114,7 +114,7 @@ export class PostgresGamesRepository implements GamesRepository {
 
     const gameIds = rawGames.map((game) => game.Id)
 
-    return Promise.all(gameIds.map((id) => this.getGame(id)))
+    return Promise.all(gameIds.map(async (id) => this.getGame(id)))
   }
 }
 

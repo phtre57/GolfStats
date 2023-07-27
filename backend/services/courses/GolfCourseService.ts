@@ -10,6 +10,10 @@ export class GolfCourseService {
     this.golfCourseRepository = golfCourseRepository
   }
 
+  async createCourse(course: GolfCourse): Promise<GolfCourse> {
+    return this.golfCourseRepository.createCourse(course)
+  }
+
   async getCourse(id: string): Promise<GolfCourse> {
     return this.golfCourseRepository.getCourse(id)
   }

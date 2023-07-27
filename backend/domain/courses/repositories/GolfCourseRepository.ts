@@ -7,4 +7,6 @@ export interface GolfCourseRepository {
   getCourses(): Promise<PartialGolfCourse[]>
 
   getTee(id: string): Promise<Tee>
+
+  createCourse(course: GolfCourse): Promise<GolfCourse>
 }

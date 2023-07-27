@@ -1,5 +1,6 @@
 import { Injector } from '@sailplane/injector'
 import { Logger } from '@sailplane/logger'
+import { uuid } from 'uuidv4'
 
 import { GolfCourse, GolfCourseRepository, PartialGolfCourse, Tee } from 'domain/courses'
 import { TeeNotFoundException } from 'domain/courses/repositories/exceptions'
@@ -15,6 +16,37 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
 
   constructor({ client }: { client : KnexClient }) {
     this.client = client
+  }
+
+  async createTee(course: GolfCourse, tee: Tee): Promise<void> {
+    await this.client.db
+      .table(TableNames.Tees)
+      .insert({
+        Id: tee.Id,
+        Name: tee.Name,
+        GolfCourseId: course.Id,
+      })
+
+    await this.client.db
+      .table(TableNames.Holes)
+      .insert({
+        ...tee,
+        Id: uuid(),
+        TeeId: tee.Id,
+      })
+  }
+
+  async createCourse(course: GolfCourse): Promise<GolfCourse> {
+    await this.client.db
+      .table(TableNames.GolfCourses)
+      .insert({
+        Id: course.Id,
+        Name: course.Name,
+      })
+
+    await Promise.all(course.Tees.map(async (tee) => this.createTee(course, tee)))
+
+    return course
   }
 
   async getTee(id: string): Promise<Tee> {
