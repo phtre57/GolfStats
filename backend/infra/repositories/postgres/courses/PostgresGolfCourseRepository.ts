@@ -27,13 +27,16 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
         GolfCourseId: course.Id,
       })
 
+    const insertedHoles: any = {
+      ...tee,
+      Id: uuid(),
+      TeeId: tee.Id,
+    }
+    delete insertedHoles.Name
+
     await this.client.db
       .table(TableNames.Holes)
-      .insert({
-        ...tee,
-        Id: uuid(),
-        TeeId: tee.Id,
-      })
+      .insert(insertedHoles)
   }
 
   async createCourse(course: GolfCourse): Promise<GolfCourse> {

@@ -1,4 +1,4 @@
-import { Tee } from '..'
+import { Hole, HoleDoesNotExistException, Tee } from '..'
 
 import { ComputedStatistics } from './ComputedStatistics'
 import { LongGameAccuracy } from './LongGameAccuracy'
@@ -18,6 +18,20 @@ export class Statistics {
   constructor(params: IStatistics) {
     this.Statistics = params.Statistics
     this.Tee = params.Tee
+  }
+
+  private hasPenalty(stat: Statistic): boolean {
+    return Boolean(stat.Penalties && stat.Penalties.length > 0)
+  }
+
+  private getHolePlayed(stat: Statistic): Hole {
+    const holePlayed = this.Tee[stat.HoleNumber]
+
+    if (holePlayed == null) {
+      throw new HoleDoesNotExistException(stat.HoleNumber, this.Tee.Id)
+    }
+
+    return holePlayed
   }
 
   private sumStatOf(key: keyof Statistic): number {
@@ -102,8 +116,14 @@ export class Statistics {
 
   public computeScrambling(): number {
     const scrambling = this.Statistics.reduce((acc, stat) => {
-      const holePlayed = this.Tee[stat.HoleNumber]
-      if (stat.IronAccuracy && stat.NumberOfPutts <= 1 && stat.IronAccuracy !== LongGameAccuracy.Hit && stat.Score <= holePlayed.Par) {
+      const holePlayed = this.getHolePlayed(stat)
+      const hasPenalty = this.hasPenalty(stat)
+
+      if (!hasPenalty
+        && stat.IronAccuracy
+        && stat.NumberOfPutts <= 1
+        && stat.IronAccuracy !== LongGameAccuracy.Hit
+        && stat.Score === holePlayed.Par) {
         return {
           ...acc,
           opportunities: acc.opportunities + 1,
@@ -111,7 +131,10 @@ export class Statistics {
         }
       }
 
-      if (stat.IronAccuracy && stat.IronAccuracy !== LongGameAccuracy.Hit && stat.NumberOfPutts > 1) {
+      if (!hasPenalty
+         && stat.IronAccuracy
+         && stat.IronAccuracy !== LongGameAccuracy.Hit
+         && stat.Score > holePlayed.Par) {
         return {
           ...acc,
           opportunities: acc.opportunities + 1,
