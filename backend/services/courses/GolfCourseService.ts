@@ -1,7 +1,7 @@
 import { Injector } from '@sailplane/injector'
 
 import { GolfCourse, GolfCourseRepository, PartialGolfCourse } from 'domain/courses'
-import { PostgresGolfCourseRepository } from 'infra/repositories/postgres/courses'
+import { DynamoDbGolfCourseRepository } from 'infra/repositories/dynamodb'
 
 export class GolfCourseService {
   private golfCourseRepository: GolfCourseRepository
@@ -24,7 +24,7 @@ export class GolfCourseService {
 }
 
 const create = (): GolfCourseService => {
-  const golfCourseRepository = Injector.get(PostgresGolfCourseRepository)!
+  const golfCourseRepository = Injector.get(DynamoDbGolfCourseRepository)!
   return new GolfCourseService({ golfCourseRepository })
 }
 

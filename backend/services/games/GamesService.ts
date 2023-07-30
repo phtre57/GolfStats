@@ -4,7 +4,7 @@ import { uuid } from 'uuidv4'
 import { GolfCourseRepository } from 'domain/courses'
 import { Game, GamesRepository, NewGame } from 'domain/games'
 import { Statistics } from 'domain/stats'
-import { PostgresGamesRepository, PostgresGolfCourseRepository } from 'infra/repositories'
+import { DynamoDbGamesRepository, DynamoDbGolfCourseRepository } from 'infra/repositories'
 
 export interface IGamesService {
   golfCourseRepository: GolfCourseRepository
@@ -23,7 +23,7 @@ export class GamesService {
 
   async createGame(newGame: NewGame): Promise<Game> {
     const golfCourse = await this.golfCourseRepository.getCourse(newGame.GolfCourseId)
-    const tee = await this.golfCourseRepository.getTee(newGame.TeeId)
+    const tee = await this.golfCourseRepository.getTee(newGame.GolfCourseId, newGame.TeeId)
     const stats = new Statistics({
       Statistics: newGame.Statistics,
       Tee: tee,
@@ -38,8 +38,8 @@ export class GamesService {
     return this.gamesRepository.createGame(game)
   }
 
-  async getGame(gameId: string): Promise<Game> {
-    return this.gamesRepository.getGame(gameId)
+  async getGame(ownerId: string, gameId: string): Promise<Game> {
+    return this.gamesRepository.getGame(ownerId, gameId)
   }
 
   async getGames(ownerId: string): Promise<Game[]> {
@@ -48,8 +48,8 @@ export class GamesService {
 }
 
 const create = () => new GamesService({
-  golfCourseRepository: Injector.get(PostgresGolfCourseRepository)!,
-  gamesRepository: Injector.get(PostgresGamesRepository)!,
+  golfCourseRepository: Injector.get(DynamoDbGolfCourseRepository)!,
+  gamesRepository: Injector.get(DynamoDbGamesRepository)!,
 })
 
 Injector.register(GamesService, create)

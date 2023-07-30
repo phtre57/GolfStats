@@ -6,10 +6,10 @@ import { GolfCourseRepository } from 'domain/courses'
 import { DateTime } from 'domain/datetime'
 import { CouldNotCreateGameException, Game, GameNotFoundException, GamesRepository, StatisticsNotFoundForGameException } from 'domain/games'
 import { Statistic, Statistics } from 'domain/stats'
+import { DynamoDbGolfCourseRepository } from 'infra/repositories/dynamodb'
 
 import { KnexClient } from '../KnexClient'
 import { TableNames } from '../TableNames'
-import { PostgresGolfCourseRepository } from '../courses'
 
 const logger = new Logger('PostgresGamesRepository')
 
@@ -75,7 +75,7 @@ export class PostgresGamesRepository implements GamesRepository {
     }
   }
 
-  async getGame(id: string): Promise<Game> {
+  async getGame(ownerId: string, id: string): Promise<Game> {
     const rawGames = await this.client.db
       .select('*')
       .from(`${TableNames.Games}`)
@@ -90,7 +90,7 @@ export class PostgresGamesRepository implements GamesRepository {
     const rawGame = rawGames[0]
 
     const course = await this.golfCourseRepository.getCourse(rawGame.GolfCourseId)
-    const tee = await this.golfCourseRepository.getTee(rawGame.TeeId)
+    const tee = await this.golfCourseRepository.getTee(rawGame.GolfCourseId, rawGame.TeeId)
 
     const stats = await this.getStatsForGame(rawGame.Id)
 
@@ -114,13 +114,13 @@ export class PostgresGamesRepository implements GamesRepository {
 
     const gameIds = rawGames.map((game) => game.Id)
 
-    return Promise.all(gameIds.map(async (id) => this.getGame(id)))
+    return Promise.all(gameIds.map(async (id) => this.getGame(ownerId, id)))
   }
 }
 
 const create = (): PostgresGamesRepository => {
   const client = Injector.get(KnexClient)!
-  const golfCourseRepository = Injector.get(PostgresGolfCourseRepository)!
+  const golfCourseRepository = Injector.get(DynamoDbGolfCourseRepository)!
   return new PostgresGamesRepository({ client, golfCourseRepository })
 }
 

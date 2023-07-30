@@ -52,7 +52,7 @@ export class PostgresGolfCourseRepository implements GolfCourseRepository {
     return course
   }
 
-  async getTee(id: string): Promise<Tee> {
+  async getTee(courseId: string, id: string): Promise<Tee> {
     const tees = await this.client.db
       .select('*')
       .from(`${TableNames.Tees} as tee`)
