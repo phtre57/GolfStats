@@ -75,6 +75,11 @@ export class PostgresGamesRepository implements GamesRepository {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateGame(game: Game): Promise<Game> {
+    throw new Error('Method not implemented.')
+  }
+
   async getGame(ownerId: string, id: string): Promise<Game> {
     const rawGames = await this.client.db
       .select('*')

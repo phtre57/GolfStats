@@ -6,4 +6,6 @@ export interface GamesRepository {
   getGames(ownerId: string): Promise<Game[]>
 
   createGame(game: Game): Promise<Game>
+
+  updateGame(game: Game): Promise<Game>
 }

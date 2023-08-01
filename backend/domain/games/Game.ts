@@ -19,6 +19,10 @@ export interface NewGame {
   OwnerId: string
 }
 
+export interface UpdateGame extends NewGame {
+  Id: string
+}
+
 export class Game {
   Id: string
 

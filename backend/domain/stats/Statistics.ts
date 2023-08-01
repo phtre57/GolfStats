@@ -123,7 +123,7 @@ export class Statistics {
         && stat.IronAccuracy
         && stat.NumberOfPutts <= 1
         && stat.IronAccuracy !== LongGameAccuracy.Hit
-        && stat.Score === holePlayed.Par) {
+        && stat.Score <= holePlayed.Par) {
         return {
           ...acc,
           opportunities: acc.opportunities + 1,

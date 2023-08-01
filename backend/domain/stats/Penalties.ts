@@ -1,1 +1,4 @@
-export type Penalties = 'OutOfBounds' | 'Dropped'
+export enum Penalties {
+  OutOfBounds = 'OutOfBounds',
+  Dropped = 'Dropped',
+}

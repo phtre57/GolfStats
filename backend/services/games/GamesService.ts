@@ -2,7 +2,7 @@ import { Injector } from '@sailplane/injector'
 import { uuid } from 'uuidv4'
 
 import { GolfCourseRepository } from 'domain/courses'
-import { Game, GamesRepository, NewGame } from 'domain/games'
+import { Game, GamesRepository, NewGame, UpdateGame } from 'domain/games'
 import { Statistics } from 'domain/stats'
 import { DynamoDbGamesRepository, DynamoDbGolfCourseRepository } from 'infra/repositories'
 
@@ -31,6 +31,22 @@ export class GamesService {
     const game = new Game({
       ...newGame,
       Id: uuid(),
+      Tee: tee,
+      GolfCourse: golfCourse,
+      Statistics: stats,
+    })
+    return this.gamesRepository.createGame(game)
+  }
+
+  async updateGame(updateGame: UpdateGame): Promise<Game> {
+    const golfCourse = await this.golfCourseRepository.getCourse(updateGame.GolfCourseId)
+    const tee = await this.golfCourseRepository.getTee(updateGame.GolfCourseId, updateGame.TeeId)
+    const stats = new Statistics({
+      Statistics: updateGame.Statistics,
+      Tee: tee,
+    })
+    const game = new Game({
+      ...updateGame,
       Tee: tee,
       GolfCourse: golfCourse,
       Statistics: stats,
